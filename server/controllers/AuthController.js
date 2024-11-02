@@ -34,7 +34,7 @@ export const signUp = async (req, res) => {
     }
 }
 
-export const signIn = async (req, res) => {
+export const signIn = async (req, res, next) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
@@ -53,7 +53,7 @@ export const signIn = async (req, res) => {
     }
 }
 
-export const getuserInfo = async (req, res) => {
+export const getuserInfo = async (req, res, next) => {
     try {
         console.log(req.userId);
         const userData = await User.findById(req.userId);
@@ -65,5 +65,27 @@ export const getuserInfo = async (req, res) => {
         console.log(error);
         res.status(500).json({ error }); 
         
+    }
+
+
+}
+export const updateProfile = async (req, res, next) => {
+    try {
+        const { userId } = req;
+        const { firstName, lastName, color} = req.body;
+        if( !firstName || !lastName || !color){
+            return res.status(400).json({message: "Firstname, Lastname and color is required."});
+        }
+        console.log(req.userId);
+        const updateData = await User.findByIdAndUpdate(userId, {
+            firstName,lastName,color,profileSetup:true
+        },{new:true, runValidators: true});
+        if (!updateData) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        return res.status(200).json({ user: updateData });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error });  
     }
 }

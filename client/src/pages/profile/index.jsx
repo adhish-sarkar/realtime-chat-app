@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { IoArrowBack } from "react-icons/io5";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { useAppStore } from "@/store";
@@ -7,6 +7,9 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { colors, getColor } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import apiClient from "@/lib/api-client";
+import { UPDATE_PROFILE } from "@/utils/constants";
 
 const Profile = () => {
     const { userInfo, setUserInfo } = useAppStore();
@@ -14,14 +17,75 @@ const Profile = () => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [image, setImage] = useState(null);
-    const [hovered, setHovered] = useState(true);
+    const [hovered, setHovered] = useState(false);
     const [selectedColor, setSelectedColor] = useState(0);
+    const fileInputRef = useRef(null);
 
-    const saveChanges = async () => {};
+    useEffect(() => {
+        if (userInfo.profileSetup) {
+          console.log(userInfo)
+            setFirstName(userInfo.firstName);
+            setLastName(userInfo.lastName);
+            setSelectedColor(userInfo.color);
+            // setImage(userInfo.image);
+            // console.log(image)
+        }
+    }, [userInfo]);
+    const validateProfile = () => {
+        if (!firstName) {
+            toast.error("First name is required.");
+            return false;
+        }
+        if (!lastName) {
+            toast.error("Last name is required.");
+            return false;
+        }
+        if (!firstName) {
+            toast.error("First name is required.");
+        }
+        return true;
+    };
+
+    const saveChanges = async () => {
+        if (validateProfile()) {
+            try {
+                const response = await apiClient.post(
+                    UPDATE_PROFILE,
+                    {
+                        firstName,
+                        lastName,
+                        color: selectedColor,
+                    },
+                    { withCredentials: true }
+                );
+
+                if (response.status === 200 && response.data) {
+                    setUserInfo(response.data.user);
+                    toast.success("Profile updated successfully.");
+                    navigate("/chat");
+                }
+            } catch (error) {
+                console.log(error);
+                toast.error(error.response?.data?.message);
+            }
+        }
+    };
+
+    const handleNavigate = () => {
+      if ( userInfo.profileSetup){
+        navigate("/chat");
+      }else {
+        toast.error("Please setup profile")
+      }
+    }
+
+    const handleFileInputClick = () => {
+      fileInputRef.current.click();
+    }
     return (
         <div className="bg-[#1b1c24] h-[100vh] flex items-center justify-center  flex-col gap-10">
             <div className="flex flex-col gap-10 w-[80vw] md:w-max ">
-                <div>
+                <div onClick={handleNavigate}>
                     <IoArrowBack className="text-4xl lg:text-6xl text-white/90 cursor-pointer" />
                 </div>
 
@@ -76,7 +140,9 @@ const Profile = () => {
                             <Input
                                 placeholder="First Name"
                                 type="text"
-                                onChange={(e) => setFirstName(e.target.value.toUpperCase())}
+                                onChange={(e) =>
+                                    setFirstName(e.target.value.toUpperCase())
+                                }
                                 value={firstName}
                                 className=" rounded-lg p-6 bg-[#2c2e3b] border-none"
                             />
@@ -85,7 +151,9 @@ const Profile = () => {
                             <Input
                                 placeholder="Last Name"
                                 type="text"
-                                onChange={(e) => setLastName(e.target.value.toUpperCase())}
+                                onChange={(e) =>
+                                    setLastName(e.target.value.toUpperCase())
+                                }
                                 value={lastName}
                                 className=" rounded-lg p-6 bg-[#2c2e3b] border-none"
                             />
