@@ -21,7 +21,7 @@ export const signUp = async (req, res) => {
             return res.status(400).json({ message: 'User already exists!  Use another email to register' });
         }
         const user = await User.create({ email, password });
-        res.cookie('token', createToken(email, user._id), {
+        res.cookie('jwt', createToken(email, user._id), {
             httpOnly: true,
             maxAge: tokenAge,
             sameSite: 'none',
@@ -50,5 +50,20 @@ export const signIn = async (req, res) => {
     catch (error) {
         console.log(error);
         res.status(400).json({ error });
+    }
+}
+
+export const getuserInfo = async (req, res) => {
+    try {
+        console.log(req.userId);
+        const userData = await User.findById(req.userId);
+        if (!userData) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        return res.status(200).json({ user: userData });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error }); 
+        
     }
 }

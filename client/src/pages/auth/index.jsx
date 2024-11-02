@@ -8,13 +8,14 @@ import { toast } from "sonner";
 import apiClient from "@/lib/api-client";
 import { SIGN_IN_ROUTE, SIGN_UP_ROUTE } from "@/utils/constants";
 import { useNavigate } from "react-router-dom";
+import { useAppStore } from "@/store";
 export const Auth = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
     const navigate = useNavigate();
-
+    const { setUserInfo } = useAppStore();
     const validateEmail = () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!email.length) {
@@ -61,35 +62,48 @@ export const Auth = () => {
             });
             console.log(response);
         if (response.status === 200) {
+            console.log(response.data.user.email);
+            console.log(response.data.user.profileSetup);
+            setUserInfo(response.data.user);
             if(response.data.user.profileSetup){
+                console.log("profile setup");
                 navigate("/chat");
             }else{
+                console.log("profile not setup");
                 navigate("/profile");
             }
             toast.success("Login successful");
         }
         } catch (error) {
-            toast.error(error.response.data.message);
+            toast.error(error.response?.data?.message);
             console.log(error.response);
         }
     };
 
     const handleSignup = async () => {
         if (!validteSignup()) return;
-        const response = await apiClient.post(
-            SIGN_UP_ROUTE,
-            {
-                email,
-                password,
-            },
-            {
-                withCredentials: true,
+        try {
+            const response = await apiClient.post(
+                SIGN_UP_ROUTE,
+                {
+                    email,
+                    password,
+                },
+                {
+                    withCredentials: true,
+                }
+            );
+            if (response.status === 201) {
+                setUserInfo(response.data?.user);
+                navigate("/profile");
+                toast.success("Sign up successful. You can now login");
+            } else {
+                toast.error("An error occured. Try again");
             }
-        );
-        if (response.status === 201) {
-            toast.success("Sign up successful. You can now login");
-        } else {
-            toast.error("An error occured. Try again");
+        } catch (error) {
+            toast.error(error.response.data.message);
+            console.log(error.response);
+            
         }
     };
 
