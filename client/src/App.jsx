@@ -1,4 +1,4 @@
-import React, { Children, useEffect, useState } from "react";
+import { Children, useEffect, useState } from "react";
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import Auth from "./pages/auth";
 import Profile from "./pages/profile";
@@ -7,16 +7,15 @@ import Chat from "./pages/chat";
 import apiClient from "./lib/api-client";
 import { GET_USER_INFO } from "./utils/constants";
 
-const PrivateRoute = ({ children }) => {
+const PrivateRoute = ({children}) => {
     const { userInfo } = useAppStore();
     const isAuthenticated = !!userInfo;
     return isAuthenticated ? children : <Navigate to="/auth" />;
 };
-
 const AuthRoute = ({ children }) => {
     const { userInfo } = useAppStore();
     const isAuthenticated = !!userInfo;
-    return isAuthenticated ? children : <Navigate to="/chat" />;
+    return isAuthenticated ?  <Navigate to="/chat" /> : children;
 };
 
 const App = () => {

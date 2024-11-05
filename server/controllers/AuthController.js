@@ -47,7 +47,13 @@ export const signIn = async (req, res, next) => {
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ message: 'Invalid credentials' });
-        }
+        };
+        res.cookie('jwt', createToken(email, user._id), {
+            httpOnly: true,
+            maxAge: tokenAge,
+            sameSite: 'none',
+            secure: true
+        });
         res.status(200).json({ user });
     }
     catch (error) {
@@ -137,6 +143,23 @@ export const removeProfileImage = async (req, res, next) => {
         user.image = null;
         await user.save();
         return res.status(200).json({message: "Image removed successfully"});
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error });
+
+    }
+}
+
+
+export const logout = async (req, res, next) => {
+    try {
+        res.cookie('jwt', '', {
+            httpOnly: true,
+            maxAge: 0,
+            sameSite: 'none',
+            secure: true
+        });
+        return res.status(200).json({ message: "Logged out successfully" });
     } catch (error) {
         console.log(error);
         res.status(500).json({ error });

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IoArrowBack } from "react-icons/io5";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { useAppStore } from "@/store";
