@@ -3,11 +3,15 @@ import { useRef, useState, useEffect } from "react";
 import { GrAttachment } from "react-icons/gr";
 import { IoSend } from "react-icons/io5";
 import { RiEmojiStickerLine } from "react-icons/ri";
+import { useAppStore } from "@/store";
+import { useSocket } from "@/context/SocketContext";
 
 const MessagesBar = () => {
     const emojiRef = useRef(null);
-    const handleSendMessage = async () => {};
+    const socket = useSocket();
+    const { selectedChatData, selectedChatType, userInfo } = useAppStore();
     const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
+    const [message, setMessage] = useState("");
 
     useEffect(() => {
         function handleClickOutside(event) {
@@ -24,13 +28,24 @@ const MessagesBar = () => {
     const handleAddEmoji = (emoji) => {
         setMessage((msg) => msg + emoji.emoji);
     };
-    const [message, setMessage] = useState("");
+    const handleSendMessage = async () => {
+        console.log(selectedChatType);
+        if (selectedChatType === "dm") {
+            socket.emit("sendMessage", {
+                recipient: selectedChatData._id,
+                sender: userInfo._id,
+                content: message,
+                messageType: "text",
+                fileUrl: undefined,
+            });
+        }
+    };
     return (
         <div className="h-[10vh] bg-[#1c1d25] flex justify-center items-center px-8 gap-2">
             <div className="flex-1 flex rounded-md bg-[#2a2b33] items-center gap-5 pr-5">
                 <input
                     type="text"
-                    className="flex-1 p-5 bg-transparent rounded-md focus:border-none focus:outline-none"
+                    className="flex-1 text-white p-5 bg-transparent rounded-md focus:border-none focus:outline-none"
                     placeholder="Enter a message"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}

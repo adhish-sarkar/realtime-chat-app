@@ -5,6 +5,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import authRoutes from './routes/AuthRoutes.js';
 import contactRoutes from './routes/ContactRoutes.js';
+import setupSocket from './socket.js';
 
 configDotenv();
 
@@ -34,3 +35,5 @@ mongoose.connect(database).then(() => {
 const server = app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+
+setupSocket(server);

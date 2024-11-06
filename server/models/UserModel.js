@@ -25,7 +25,6 @@ const userSchema = new mongoose.Schema({
     },
     image: {
         type: String,
-        default: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fpk.ign.com%2Favatar-generations&psig=AOvVaw0KzlRttuzsTm9SfV2LR4XU&ust=1726152665274000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCNDZpfeRu4gDFQAAAAAdAAAAABAE'
     },
     color: {
         type: String,
