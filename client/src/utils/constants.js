@@ -9,6 +9,10 @@ const REMOVE_PROFILE_IMAGE = `${AUTH_ROUTES}/remove-profile-image`;
 const LOGOUT = `${AUTH_ROUTES}/logout`;
 
 
+
+const CONTACTS_ROUTES = '/api/contacts';
+const SEARCH_CONTACTS = `${CONTACTS_ROUTES}/search`;
+
 export {
     HOST,
     AUTH_ROUTES,
@@ -18,5 +22,7 @@ export {
     UPDATE_PROFILE,
     ADD_PROFILE_IMAGE,
     REMOVE_PROFILE_IMAGE,
-    LOGOUT
+    LOGOUT,
+    CONTACTS_ROUTES,
+    SEARCH_CONTACTS
 };

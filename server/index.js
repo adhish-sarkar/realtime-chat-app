@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import authRoutes from './routes/AuthRoutes.js';
+import contactRoutes from './routes/ContactRoutes.js';
 
 configDotenv();
 
@@ -24,6 +25,7 @@ app.use(express.json());
 
 
 app.use('/api/auth', authRoutes);
+app.use("/api/contacts",contactRoutes);
 
 mongoose.connect(database).then(() => {
     console.log('Database connected');
