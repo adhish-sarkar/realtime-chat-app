@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import authRoutes from './routes/AuthRoutes.js';
 import contactRoutes from './routes/ContactRoutes.js';
 import setupSocket from './socket.js';
+import messagesRoutes from './routes/MessagesRoutes.js';
 
 configDotenv();
 
@@ -27,6 +28,7 @@ app.use(express.json());
 
 app.use('/api/auth', authRoutes);
 app.use("/api/contacts",contactRoutes);
+app.use("/api/messages",messagesRoutes);
 
 mongoose.connect(database).then(() => {
     console.log('Database connected');

@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
 import { useAppStore } from "@/store";
 import moment from "moment";
+import apiClient from "@/lib/api-client";
+import { GET_ALL_MESSAGES } from "@/utils/constants";
 const MessagesContainer = () => {
     const scrollRef = useRef();
     const {
@@ -8,8 +10,29 @@ const MessagesContainer = () => {
         selectedChatType,
         userInfo,
         selectedChatMessages,
+        setSelectedChatMessages,
     } = useAppStore();
 
+    useEffect(() => {
+        const getMessages = async () => {
+            try {
+                const response = await apiClient.post(GET_ALL_MESSAGES, {
+                    userId: selectedChatData._id,
+                },{withCredentials: true});
+                if(response.data.messages){
+                    setSelectedChatMessages(response.data.messages);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        if (selectedChatData._id) {
+            if (selectedChatType === "dm") {
+                getMessages();
+            }
+        }
+    }, [selectedChatData, selectedChatType, setSelectedChatMessages]);
     useEffect(() => {
         if (scrollRef.current) {
             scrollRef.current.scrollIntoView({ behavior: "smooth" });
@@ -18,7 +41,7 @@ const MessagesContainer = () => {
     const renderMessages = () => {
         let lastDate = null;
         return selectedChatMessages.map((message, index) => {
-            const messageDate = new moment(message.timestamp).format(
+            const messageDate = new moment(message.timeStamps).format(
                 "YYYY-MM-DD"
             );
             const showDate = lastDate !== messageDate;
@@ -27,7 +50,7 @@ const MessagesContainer = () => {
                 <div key={index}>
                     {showDate && (
                         <div className="text-center text-gray-500 my-2">
-                            {moment(message.timestamp).format("LL")}
+                            {moment(message.timeStamps).format("LL")}
                         </div>
                     )}
                     {selectedChatType === "dm" && renderDmMessages(message)}
@@ -56,7 +79,7 @@ const MessagesContainer = () => {
                 </div>
             )}
             <div className="text-xs text-gray-600">
-                {moment(message.timestamp).format("LT")}
+                {moment(message.timeStamps).format("LT")}
             </div>
         </div>
     );

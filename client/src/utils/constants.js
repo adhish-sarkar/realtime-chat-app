@@ -13,6 +13,11 @@ const LOGOUT = `${AUTH_ROUTES}/logout`;
 const CONTACTS_ROUTES = '/api/contacts';
 const SEARCH_CONTACTS = `${CONTACTS_ROUTES}/search`;
 
+
+
+const MESSAGES_ROUTES = '/api/messages';
+const GET_ALL_MESSAGES = `${MESSAGES_ROUTES}/get-messages`;
+
 export {
     HOST,
     AUTH_ROUTES,
@@ -24,5 +29,7 @@ export {
     REMOVE_PROFILE_IMAGE,
     LOGOUT,
     CONTACTS_ROUTES,
-    SEARCH_CONTACTS
+    SEARCH_CONTACTS,
+    MESSAGES_ROUTES,
+    GET_ALL_MESSAGES
 };
