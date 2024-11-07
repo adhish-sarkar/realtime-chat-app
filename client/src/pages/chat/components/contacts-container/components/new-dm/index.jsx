@@ -110,7 +110,8 @@ const NewDM = () => {
                                                 />
                                             ) : (
                                                 <div
-                                                    className={`uppercase h-12 w-12  text-lg border-[1px] flex items-center justify-center ${getColor(
+                                                    className={`uppercase h-12 w-12  text-lg border-[1px] flex items-center
+                                                        rounded-full justify-center ${getColor(
                                                         contact.color
                                                     )}`}
                                                 >

@@ -12,11 +12,13 @@ const LOGOUT = `${AUTH_ROUTES}/logout`;
 
 const CONTACTS_ROUTES = '/api/contacts';
 const SEARCH_CONTACTS = `${CONTACTS_ROUTES}/search`;
+const GET_CONTACTS_FOR_DM = `${CONTACTS_ROUTES}/getcontactsfordm`;
 
 
 
 const MESSAGES_ROUTES = '/api/messages';
 const GET_ALL_MESSAGES = `${MESSAGES_ROUTES}/get-messages`;
+const UPLOAD_FILE = `${MESSAGES_ROUTES}/upload-file`;
 
 export {
     HOST,
@@ -31,5 +33,7 @@ export {
     CONTACTS_ROUTES,
     SEARCH_CONTACTS,
     MESSAGES_ROUTES,
-    GET_ALL_MESSAGES
+    GET_ALL_MESSAGES,
+    GET_CONTACTS_FOR_DM,
+    UPLOAD_FILE
 };
