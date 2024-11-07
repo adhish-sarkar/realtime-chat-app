@@ -7,7 +7,6 @@ const ContactList = ({ contacts, isChannel = false }) => {
         setSelectedChatData,
         setSelectedChatType,
         selectedChatData,
-        selectedChatType,
         setSelectedChatMessages,
     } = useAppStore();
 
@@ -98,6 +97,51 @@ const ContactList = ({ contacts, isChannel = false }) => {
                                 </div>
                             </div>
                         )}
+                        {
+                            isChannel && (
+                                <div className="flex w-full gap-4">
+                                    <div className="w-10 h-10  relative">
+                                        <Avatar
+                                            className={`h-10 w-10 rounded-full`}
+                                        >
+                                            <div
+                                                className={`
+                                                ${
+                                                    selectedChatData &&
+                                                    selectedChatData._id ===
+                                                        contact._id
+                                                        ? "bg-[#ffffff22] border-2 border-white"
+                                                        : `${getColor(
+                                                              contact.color
+                                                          )}`
+                                                }
+                                                uppercase h-10 w-10  text-lg 
+                                                rounded-full overflow-hidden flex items-center justify-center `}
+                                            >#
+                                                {/* {contact.name
+                                                    ? contact.name
+                                                          .split("")
+                                                          .shift()
+                                                    : ""} */}
+                                            </div>
+                                        </Avatar>
+                                    </div>
+                                    <div
+                                        className={`${
+                                            selectedChatData &&
+                                            selectedChatData._id === contact._id
+                                                ? "font-bold"
+                                                : ""
+                                        } flex flex-col`}
+                                    >
+                                        {contact.name}
+                                        <p className="text-gray-400 text-sm ">
+                                            {contact.members.length} Members
+                                        </p>
+                                    </div>
+                                </div>
+                            )
+                        }
                     </div>
                 </div>
             ))}

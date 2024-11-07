@@ -13,6 +13,7 @@ const LOGOUT = `${AUTH_ROUTES}/logout`;
 const CONTACTS_ROUTES = '/api/contacts';
 const SEARCH_CONTACTS = `${CONTACTS_ROUTES}/search`;
 const GET_CONTACTS_FOR_DM = `${CONTACTS_ROUTES}/getcontactsfordm`;
+const GET_ALL_CONTACTS = `${CONTACTS_ROUTES}/get-allcontacts`;
 
 
 
@@ -20,6 +21,11 @@ const MESSAGES_ROUTES = '/api/messages';
 const GET_ALL_MESSAGES = `${MESSAGES_ROUTES}/get-messages`;
 const UPLOAD_FILE = `${MESSAGES_ROUTES}/upload-file`;
 
+
+
+const CHANNEL_ROUTES = '/api/channels';
+const CREATE_CHANNEL = `${CHANNEL_ROUTES}/create-channel`;
+const GET_USER_CHANNELS = `${CHANNEL_ROUTES}/get-user-channels`;
 export {
     HOST,
     AUTH_ROUTES,
@@ -35,5 +41,9 @@ export {
     MESSAGES_ROUTES,
     GET_ALL_MESSAGES,
     GET_CONTACTS_FOR_DM,
-    UPLOAD_FILE
+    UPLOAD_FILE,
+    GET_ALL_CONTACTS,
+    CHANNEL_ROUTES,
+    CREATE_CHANNEL,
+    GET_USER_CHANNELS,
 };

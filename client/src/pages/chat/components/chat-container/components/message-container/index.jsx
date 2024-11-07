@@ -125,7 +125,7 @@ const MessagesContainer = () => {
                         message.sender !== selectedChatData._id
                             ? "bg-[#8417ff]/5 text-[#8417ff]/100 border-[#8417ff]/50"
                             : "bg-[#2a2b33]/5 text-white/90 border-[#ffffff]/20"
-                    } border inline-block p-3 rounded my-1 max-w-[50%] break-words`}
+                    } border inline-block p-3 rounded my-1 max-w-[80%] break-words`}
                 >
                     {checkIfImage(message.fileUrl) ? (
                         <div
