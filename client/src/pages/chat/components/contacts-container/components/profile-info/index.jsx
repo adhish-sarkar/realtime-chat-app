@@ -36,7 +36,7 @@ const ProfileInfo = () => {
                             />
                         ) : (
                             <div
-                                className={`uppercase h-12 w-12  text-lg border-[1px] flex items-center justify-center ${getColor(
+                                className={`uppercase h-12 w-12  text-lg rounded-full flex items-center justify-center ${getColor(
                                     userInfo.color
                                 )}`}
                             >
@@ -64,7 +64,7 @@ const ProfileInfo = () => {
                         onClick={() => navigate('/profile')}
                         />
                         </TooltipTrigger>
-                        <TooltipContent className="bg-[#1c1b1e] border-none">
+                        <TooltipContent className="bg-[#1c1b1e] text-purple-500 border-none">
                         Edit Profile
                         </TooltipContent>
                     </Tooltip>
@@ -76,7 +76,7 @@ const ProfileInfo = () => {
                         onClick={logout}
                         />
                         </TooltipTrigger>
-                        <TooltipContent className="bg-[#1c1b1e] border-none">
+                        <TooltipContent className="bg-[#1c1b1e] text-red-500 border-none">
                         Logout
                         </TooltipContent>
                     </Tooltip>

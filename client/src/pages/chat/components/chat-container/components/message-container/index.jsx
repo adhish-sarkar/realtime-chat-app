@@ -2,10 +2,17 @@ import { useEffect, useRef, useState } from "react";
 import { useAppStore } from "@/store";
 import moment from "moment";
 import apiClient from "@/lib/api-client";
-import { GET_ALL_MESSAGES, HOST } from "@/utils/constants";
+import {
+    GET_ALL_MESSAGES,
+    GET_CHANNEL_MESSAGES,
+    HOST,
+} from "@/utils/constants";
 import { MdFolderZip } from "react-icons/md";
 import { IoMdArrowRoundDown } from "react-icons/io";
 import { IoCloseSharp } from "react-icons/io5";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { getColor } from "@/lib/utils";
+import { AvatarFallback } from "@radix-ui/react-avatar";
 const MessagesContainer = () => {
     const scrollRef = useRef();
     const {
@@ -16,7 +23,7 @@ const MessagesContainer = () => {
         setSelectedChatMessages,
         setFileDownloadProgress,
         setIsDownloading,
-        fileDownloadProgress
+        fileDownloadProgress,
     } = useAppStore();
     const [showImage, setShowImage] = useState(false);
     const [imageUrl, setImageUrl] = useState(null);
@@ -38,10 +45,26 @@ const MessagesContainer = () => {
                 console.log(error);
             }
         };
-
+        const getChannelMessages = async () => {
+            try {
+                const response = await apiClient.get(
+                    `${GET_CHANNEL_MESSAGES}/${selectedChatData._id}`,
+                    {
+                        withCredentials: true,
+                    }
+                );
+                if (response.data.messages) {
+                    setSelectedChatMessages(response.data.messages);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
         if (selectedChatData._id) {
             if (selectedChatType === "dm") {
                 getMessages();
+            } else if (selectedChatType === "channel") {
+                getChannelMessages();
             }
         }
     }, [selectedChatData, selectedChatType, setSelectedChatMessages]);
@@ -66,6 +89,8 @@ const MessagesContainer = () => {
                         </div>
                     )}
                     {selectedChatType === "dm" && renderDmMessages(message)}
+                    {selectedChatType === "channel" &&
+                        renderChannelMessages(message)}
                 </div>
             );
         });
@@ -81,12 +106,14 @@ const MessagesContainer = () => {
         const response = await apiClient.get(`${HOST}/${url}`, {
             responseType: "blob",
             onDownloadProgress: (progressEvent) => {
-                console.log(fileDownloadProgress)
-                console.log(progressEvent)
+                console.log(fileDownloadProgress);
+                console.log(progressEvent);
                 setFileDownloadProgress(
-                    Math.round((progressEvent.loaded * 100) / progressEvent.total)
+                    Math.round(
+                        (progressEvent.loaded * 100) / progressEvent.total
+                    )
                 );
-                console.log(fileDownloadProgress)
+                console.log(fileDownloadProgress);
             },
         });
         const urlBlob = window.URL.createObjectURL(new Blob([response.data]));
@@ -100,6 +127,152 @@ const MessagesContainer = () => {
         setIsDownloading(false);
         setFileDownloadProgress(0);
     };
+
+    const renderChannelMessages = (message) => (
+        console.log(message.sender._id !== userInfo._id),
+        (
+            <div
+                className={`mt-5 ${
+                    message.sender._id !== userInfo._id
+                        ? "text-left"
+                        : "text-right"
+                } w-full`}
+            >
+                {message.messageType === "text" && (
+                    <div
+                        className={`flex gap-2 ${
+                            message.sender._id === userInfo._id
+                                ? "justify-end"
+                                : ""
+                        }`}
+                    >
+                        {message.sender._id !== userInfo._id && (
+                            <div className="flex items-center justify-start gap-3">
+                                <Avatar className="h-8 w-8 rounded-full overflow-hidden">
+                                    {message.sender.image && (
+                                        <AvatarImage
+                                            src={`${HOST}/${message.sender.image}`}
+                                            alt="profile"
+                                            className=" object-cover w-full h-full bg-black"
+                                        />
+                                    )}
+                                    <AvatarFallback
+                                        className={`uppercase h-8 w-8 rounded-full text-lg overflow-hidden flex items-center justify-center ${getColor(
+                                            message.sender.color
+                                        )}`}
+                                    >
+                                        {message.sender.firstName
+                                            ? message.sender.firstName
+                                                  .split("")
+                                                  .shift() +
+                                              message.sender.lastName
+                                                  ?.split("")
+                                                  .shift()
+                                            : message.sender.email
+                                                  .split("")
+                                                  .shift()}
+                                    </AvatarFallback>
+                                </Avatar>
+                            </div>
+                        )}
+                        <div
+                            className={`${
+                                message.sender._id === userInfo._id
+                                    ? "bg-[#8417ff]/5 text-[#8417ff]/100 border-[#8417ff]/50"
+                                    : "bg-[#2a2b33]/5 text-white/90 border-[#ffffff]/20"
+                            } border inline-block p-3 rounded my-1 max-w-[80%] break-words`}
+                        >
+                            {message.content}
+                        </div>
+                    </div>
+                )}
+                {message.messageType === "file" && (
+                    <div
+                        className={`flex gap-2 ${
+                            message.sender._id === userInfo._id
+                                ? "justify-end"
+                                : ""
+                        }`}
+                    >
+                        {message.sender._id !== userInfo._id && (
+                            <div className="flex items-center justify-start gap-3">
+                                <Avatar className="h-8 w-8 rounded-full overflow-hidden">
+                                    {message.sender.image && (
+                                        <AvatarImage
+                                            src={`${HOST}/${message.sender.image}`}
+                                            alt="profile"
+                                            className=" object-cover w-full h-full bg-black"
+                                        />
+                                    )}
+                                    <AvatarFallback
+                                        className={`uppercase h-8 w-8 rounded-full text-lg overflow-hidden flex items-center justify-center ${getColor(
+                                            message.sender.color
+                                        )}`}
+                                    >
+                                        {message.sender.firstName
+                                            ? message.sender.firstName
+                                                  .split("")
+                                                  .shift() +
+                                              message.sender.lastName
+                                                  ?.split("")
+                                                  .shift()
+                                            : message.sender.email
+                                                  .split("")
+                                                  .shift()}
+                                    </AvatarFallback>
+                                </Avatar>
+                            </div>
+                        )}
+                        <div
+                            className={`${
+                                message.sender._id === userInfo._id
+                                    ? "bg-[#8417ff]/5 text-[#8417ff]/100 border-[#8417ff]/50"
+                                    : "bg-[#2a2b33]/5 text-white/90 border-[#ffffff]/20"
+                            } border inline-block p-3 rounded my-1 max-w-[80%] break-words`}
+                        >
+                            {checkIfImage(message.fileUrl) ? (
+                                <div
+                                    className="cursor-pointer"
+                                    onClick={() => {
+                                        setShowImage(true);
+                                        setImageUrl(message.fileUrl);
+                                    }}
+                                >
+                                    <img
+                                        src={`${HOST}/${message.fileUrl}`}
+                                        alt={`${message.fileUrl}`}
+                                        height={300}
+                                        width={300}
+                                    />
+                                </div>
+                            ) : (
+                                <div className="flex w-full break-words items-center justify-between gap-4">
+                                    <span className="text-white/80 text-3xl bg-black/20 rounded-full p-3">
+                                        <MdFolderZip />
+                                    </span>
+                                    <span className="w-[60%]">
+                                        {message.fileUrl.split("/").pop()}
+                                    </span>
+                                    <span
+                                        className="bg-black/20 p-3 text-2xl rounded-full hover:bg-black/50 cursor-pointer transition-all duration-300"
+                                        onClick={() =>
+                                            downloadFile(message.fileUrl)
+                                        }
+                                    >
+                                        <IoMdArrowRoundDown />
+                                    </span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                )}
+                <div className="text-xs text-gray-600">
+                    {message.sender.firstName} {message.sender.lastName + " "}
+                    {moment(message.timeStamps).format("LT")}
+                </div>
+            </div>
+        )
+    );
     const renderDmMessages = (message) => (
         <div
             className={`${
@@ -147,7 +320,9 @@ const MessagesContainer = () => {
                             <span className="text-white/80 text-3xl bg-black/20 rounded-full p-3">
                                 <MdFolderZip />
                             </span>
-                            <span className="w-[60%]">{message.fileUrl.split("/").pop()}</span>
+                            <span className="w-[60%]">
+                                {message.fileUrl.split("/").pop()}
+                            </span>
                             <span
                                 className="bg-black/20 p-3 text-2xl rounded-full hover:bg-black/50 cursor-pointer transition-all duration-300"
                                 onClick={() => downloadFile(message.fileUrl)}

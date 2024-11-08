@@ -41,7 +41,16 @@ const MessagesBar = () => {
                 messageType: "text",
                 fileUrl: undefined,
             });
-        }
+        }else if(selectedChatType === "channel"){
+            socket.emit("sendChannelMessage", {
+                channelId: selectedChatData._id,
+                sender: userInfo._id,
+                content: message,
+                messageType: "text",
+                fileUrl: undefined,
+            });
+        };
+        setMessage("");
     };
 
     const handleAttachmentClick = () => {
@@ -79,12 +88,26 @@ const MessagesBar = () => {
                         messageType: "file",
                         fileUrl: response.data.filePath,
                     });
+                } else if (selectedChatType === "channel") {
+                    socket.emit("sendChannelMessage", {
+                        channelId: selectedChatData._id,
+                        sender: userInfo._id,
+                        content: undefined,
+                        messageType: "file",
+                        fileUrl: response.data.filePath,
+                    });
                 }
             }
         } catch (error) {
             console.log(error);
         }
     };
+    const handleKeyPress = (e) => {
+        if (e.key === "Enter" || e.keyCode === 13) {
+            handleSendMessage();
+        }
+    };
+
     return (
         <div className="h-[10vh] bg-[#1c1d25] flex justify-center items-center px-8 gap-2">
             <div className="flex-1 flex rounded-md bg-[#2a2b33] items-center gap-5 pr-5">
@@ -94,6 +117,7 @@ const MessagesBar = () => {
                     placeholder="Enter a message"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
+                    onKeyDown={handleKeyPress}
                 />
                 <button className=" text-neutral-500 focus:border-none focus:outline-none focus:text-white duration-300 transition-all"
                 onClick={handleAttachmentClick}>
