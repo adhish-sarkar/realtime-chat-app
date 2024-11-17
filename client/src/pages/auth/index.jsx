@@ -114,7 +114,7 @@ export const Auth = () => {
                     <div className="flex items-center justify-center flex-col">
                         <div className="flex items-center justify-center">
                             <h1 className="text-5xl font-bold md:text-6xl">
-                                Welcome
+                                ConnecTide
                             </h1>
                             <img
                                 src={Victory}

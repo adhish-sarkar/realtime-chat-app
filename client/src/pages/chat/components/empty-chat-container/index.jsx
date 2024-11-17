@@ -13,7 +13,7 @@ const EmptyChatContainer = () => {
                 <h3 className=" poppins-medium">
                     Hi<span className=" text-purple-500">! </span>
                     Welcome to
-                    <span className="text-purple-500"> Syncronus</span> Chat app
+                    <span className="text-purple-500"> ConnecTide</span> Chat app
                     <span className=" text-purple-500">👋</span>
                 </h3>
             </div>
