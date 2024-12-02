@@ -4,6 +4,7 @@ import ProfileInfo from "./components/profile-info";
 import apiClient from "@/lib/api-client";
 import { GET_CONTACTS_FOR_DM, GET_USER_CHANNELS } from "@/utils/constants";
 import { useAppStore } from "@/store";
+// import { useNavigate } from "react-router-dom";
 import ContactList from "@/components/contact-list";
 import CreateChannel from "./components/create-channel";
 
@@ -61,6 +62,10 @@ const ContactContainer = () => {
 export default ContactContainer;
 
 const Logo = () => {
+    const {
+        setSelectedChatType,
+        // selectedChatType
+    } =useAppStore();
     return (
         <div className="flex p-5  justify-start items-center gap-2">
             <svg
@@ -88,7 +93,7 @@ const Logo = () => {
                     fill="#a16ee8"
                 ></path>{" "}
             </svg>
-            <span className="text-3xl font-semibold text-white">ConnecTide</span>
+            <span className="text-3xl font-semibold text-white cursor-pointer select-none" onClick={()  => setSelectedChatType(false)}>ConnecTide</span>
         </div>
     );
 };

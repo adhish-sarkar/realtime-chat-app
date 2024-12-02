@@ -12,7 +12,7 @@ const Chat = () => {
     const {
         userInfo,
         selectedChatType,
-        setSelectedChatData,
+        // setSelectedChatData,
         isUploading,
         isDownloading,
         fileUploadProgress,

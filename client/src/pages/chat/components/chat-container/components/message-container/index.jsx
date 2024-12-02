@@ -129,7 +129,6 @@ const MessagesContainer = () => {
     };
 
     const renderChannelMessages = (message) => (
-        console.log(message.sender._id !== userInfo._id),
         (
             <div
                 className={`mt-5 ${

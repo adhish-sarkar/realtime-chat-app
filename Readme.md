@@ -51,7 +51,7 @@ Welcome to the Chat App! This application allows users to communicate with each 
 
 ```
 PORT=8747
-JWT_SECRET=your-jwt-secret-key
+JWT_SECRET=key
 ORIGIN="http://localhost:5173"
 DATABASE_URL="mongodb://localhost:27017/your-mongo-database-name"
 
@@ -60,7 +60,7 @@ DATABASE_URL="mongodb://localhost:27017/your-mongo-database-name"
 ## Client env file
 
 ```
-VITE_SERVER="http://localhost:8747"
+VITE_SERVER="http://localhost:port"
 
 ```
 ## Contributing
