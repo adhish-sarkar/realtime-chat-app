@@ -8,6 +8,8 @@ import contactRoutes from './routes/ContactRoutes.js';
 import setupSocket from './socket.js';
 import messagesRoutes from './routes/MessagesRoutes.js';
 import channelRoutes from './routes/ChannelRoutes.js';
+import swaggerSpec from './swager.js';
+import { serve, setup } from 'swagger-ui-express';
 
 configDotenv();
 
@@ -32,6 +34,7 @@ app.use('/api/auth', authRoutes);
 app.use("/api/contacts",contactRoutes);
 app.use("/api/messages",messagesRoutes);
 app.use("/api/channels",channelRoutes);
+app.use('/api-docs',serve,setup(swaggerSpec));
 
 mongoose.connect(database).then(() => {
     console.log('Database connected');

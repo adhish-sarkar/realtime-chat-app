@@ -18,6 +18,16 @@ const upload = multer({
 
 const authRoutes = Router();
 
+/**
+ * @swagger
+ * /signup:
+ *   post:
+ *     summary: Sign up to the Server
+ *     description: Create an account to the portal.
+ *     responses:
+ *       201:
+ *         description: Successfully Create an account.
+ */
 authRoutes.post('/signup', signUp);
 authRoutes.post('/signin', signIn);
 authRoutes.get('/user-info', verifyToken, getuserInfo);
