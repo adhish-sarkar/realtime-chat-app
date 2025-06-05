@@ -1,4 +1,4 @@
-const HOST = import.meta.env.VITE_SERVER || 'http://localhost:3000';
+const HOST = import.meta.env.VITE_SERVER || 'http://13.235.82.99';
 const AUTH_ROUTES = '/api/auth';
 const SIGN_UP_ROUTE = `${AUTH_ROUTES}/signup`;
 const SIGN_IN_ROUTE = `${AUTH_ROUTES}/signin`;
