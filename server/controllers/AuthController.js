@@ -48,13 +48,14 @@ export const signIn = async (req, res, next) => {
         if (!isMatch) {
             return res.status(400).json({ message: 'Invalid credentials' });
         };
-        res.cookie('jwt', createToken(email, user._id), {
+        const token = createToken(email, user._id);
+        res.cookie('jwt', token, {
             httpOnly: true,
             maxAge: tokenAge,
             sameSite: 'none',
             secure: true
         });
-        res.status(200).json({ user });
+        res.status(200).json({ user, token: token });
     }
     catch (error) {
         console.log(error);
@@ -129,20 +130,20 @@ export const removeProfileImage = async (req, res, next) => {
         const { userId } = req;
         const user = await User.findById(userId);
 
-        if(!user){
-            return res.status(404).json({message: "User not found"});
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
         }
 
-        if(!user.image){
-            return res.status(404).json({message: "No image found"});
+        if (!user.image) {
+            return res.status(404).json({ message: "No image found" });
         }
 
-        if( user.image){
+        if (user.image) {
             unlinkSync(user.image);
         }
         user.image = null;
         await user.save();
-        return res.status(200).json({message: "Image removed successfully"});
+        return res.status(200).json({ message: "Image removed successfully" });
     } catch (error) {
         console.log(error);
         res.status(500).json({ error });
