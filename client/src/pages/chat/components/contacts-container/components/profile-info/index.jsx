@@ -18,6 +18,7 @@ const ProfileInfo = () => {
             if(response.status === 200){
                 navigate('/auth');
                 setUserInfo(null);
+                localStorage.clear()
             }
         } catch (error) {
             console.log(error);

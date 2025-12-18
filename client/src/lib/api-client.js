@@ -6,7 +6,7 @@ const apiClient = axios.create({
     baseURL: HOST,
     withCredentials: true,
     headers: {
-        'x-accesss-token': token
+        Authorization: token
     }
 });
 
